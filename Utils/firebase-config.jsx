@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 // import { getAnalytics } from "firebase/analytics";
-import { getFirestore, collection, getDocs } from "firebase/firestore";
+import { getFirestore, collection, getDocs, updateDoc, increment } from "firebase/firestore";
 
 
 // const analytics = getAnalytics(app);
@@ -18,9 +18,75 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-const colRef = collection(db, 'Upvotes')
+const upvoteRef = collection(db, 'Upvotes')
+const downvoteRef = collection(db, 'Downvotes')
+const starsRef = collection(db, 'Stars')
 
-// const voteSnap = await getDocs(colRef)
+export const getUpvoteCount = async () => {
+    const upvoteDocSnap = await getDocs(upvoteRef);
+    console.log("Upvote collection data:", upvoteDocSnap.docs[0].data().f1);
+    return upvoteDocSnap;
+};
+
+export const getDownvoteCount = async () => {
+    const downvoteDocSnap = await getDocs(downvoteRef);
+    console.log("Downvote collection data:", downvoteDocSnap.docs[0].data().f1);
+    return downvoteDocSnap;
+};
+
+export const getStarsCount = async () => {
+    const starsDocSnap = await getDocs(starsRef);
+    console.log("Stars collection data:", starsDocSnap.docs[0].data().f1);
+    return starsDocSnap;
+};
+
+export const incrementUpvotes = async () => {
+    const docSnap = await getDocs(upvoteRef);
+    if (docSnap.docs.length > 0) {
+        const firstDocRef = docSnap.docs[0].ref;
+        try {
+            await updateDoc(firstDocRef, {
+                f1: increment(1),
+            })
+        } catch (error) {
+            console.log('Error updating document: ', error);
+        }
+    } else {
+        console.log('No documents found in Upvotes collection')
+    }
+}
+
+export const decrementDownvotes = async () => {
+    const docSnap = await getDocs(downvoteRef);
+    if (docSnap.docs.length > 0) {
+        const firstDocRef = docSnap.docs[0].ref;
+        try {
+            await updateDoc(firstDocRef, {
+                f1: increment(1),
+            })
+        } catch (error) {
+            console.log('Error updating document: ', error);
+        }
+    }
+}
+
+export const incrementStars = async () => {
+    const docSnap = await getDocs(starsRef);
+    if (docSnap.docs.length > 0) {
+        const firstDocRef = docSnap.docs[0].ref;
+        try {
+            await updateDoc(firstDocRef, {
+                f1: increment(1),
+            })
+        } catch (error) {
+            console.log('Error updating document: ', error);
+        }
+    }
+}
+
+// THIS FUNCTION ALSO WORKS
+
+// const voteSnap = await getDocs(upVoteRef)
 //     .then((data) => {
 //         console.log('voteSnap data', data.docs[0].data().f1)
 //     })
@@ -29,14 +95,3 @@ const colRef = collection(db, 'Upvotes')
 //     })
 
 // export default voteSnap;
-
-const getUpvoteCount = async () => {
-    const docSnap = await getDocs(colRef);
-    console.log("Document data:", docSnap.docs[0].data().f1);
-    return docSnap;
-};
-
-export default getUpvoteCount;
-
-
-
