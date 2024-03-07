@@ -11,7 +11,14 @@ import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import StarIcon from '@mui/icons-material/Star';
 import { styled } from '@mui/material/styles';
-import { getUpvoteCount, getDownvoteCount, getStarsCount, incrementUpvotes, decrementDownvotes } from "../Utils/firebase-config";
+import { 
+    getUpvoteCount, 
+    getDownvoteCount, 
+    getStarsCount, 
+    incrementUpvotes, 
+    decrementDownvotes, 
+    incrementStars, 
+        } from "../Utils/firebase-config";
 // import voteSnap from "../Utils/firebase-config";
 
 
@@ -72,7 +79,7 @@ export default function LikeButtons() {
                     Stars
                 </Typography>
                 <Typography gutterBottom variant="h6" component="div">
-                    $4.50
+                    {stars}
                 </Typography>
 
             </Stack>
@@ -85,25 +92,36 @@ export default function LikeButtons() {
                     onClick={async () => {
                         console.log('upVotes: ', upVotes); 
                         const success = incrementUpvotes();
-                        if (success) {
-                            setUpvotes(prevState => prevState + 1);
+                            if (success) {
+                                setUpvotes(prevState => prevState + 1);
+                            }
                         }
                     }
-                }/>
+                />
             </Fab>
             <Fab color="secondary" aria-label="subtract">
                 <ArrowDownwardIcon 
                     onClick={async () => {
                         console.log('downVotes: ', downVotes); 
                         const success = decrementDownvotes();
-                        if (success) {
-                            setDownvotes(prevState => prevState + 1);
+                            if (success) {
+                                setDownvotes(prevState => prevState + 1);
+                            }
                         }
                     }
-                }/>
+                />
             </Fab>
             <Fab aria-label="like">
-                <StarIcon />
+                <StarIcon 
+                    onClick={async () => {
+                        console.log('stars: ', stars); 
+                        const success = incrementStars();
+                            if (success) {
+                                setStars(prevState => prevState + 1);
+                            }
+                        }
+                    }
+                />
             </Fab>
         </Box>
     </Card>

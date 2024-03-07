@@ -70,6 +70,20 @@ export const decrementDownvotes = async () => {
     }
 }
 
+export const incrementStars = async () => {
+    const docSnap = await getDocs(starsRef);
+    if (docSnap.docs.length > 0) {
+        const firstDocRef = docSnap.docs[0].ref;
+        try {
+            await updateDoc(firstDocRef, {
+                f1: increment(1),
+            })
+        } catch (error) {
+            console.log('Error updating document: ', error);
+        }
+    }
+}
+
 // THIS FUNCTION ALSO WORKS
 
 // const voteSnap = await getDocs(upVoteRef)
