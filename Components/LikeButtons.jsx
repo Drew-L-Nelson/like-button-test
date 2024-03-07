@@ -18,16 +18,29 @@ import {
     incrementUpvotes, 
     decrementDownvotes, 
     incrementStars, 
-        } from "../Utils/firebase-config";
-// import voteSnap from "../Utils/firebase-config";
-
-
+    } from "../Utils/firebase-config";
 
 export default function LikeButtons() {
 
     const [upVotes, setUpvotes] = useState(0);
     const [downVotes, setDownvotes] = useState(0);
     const [stars, setStars] = useState(0);
+    const [starIsClicked, setStarIsClicked] = useState(false);
+
+    const starsHandleClicked = () => {
+        setStarIsClicked(!starIsClicked);
+    };
+
+    const defaultStyle = {
+        transition: '0.3s',
+    };
+
+    const clickedStyle = {
+        backgroundColor: 'gold', // Change the color to gold
+        color: 'white',
+        transition: '0.3s',
+        filter: 'drop-shadow(0 0 4px gold)', // Apply a glow effect
+    };
 
     useEffect(() => {
         const fetchUpVotes = async () => {
@@ -111,12 +124,12 @@ export default function LikeButtons() {
                     }
                 />
             </Fab>
-            <Fab aria-label="like">
+            <Fab aria-label="like" onClick={starsHandleClicked} sx={ starIsClicked? clickedStyle : defaultStyle } >
                 <StarIcon 
                     onClick={async () => {
                         console.log('stars: ', stars); 
                         const success = incrementStars();
-                            if (success) {
+                            if (success && !starIsClicked) {
                                 setStars(prevState => prevState + 1);
                             }
                         }
