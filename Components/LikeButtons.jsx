@@ -11,7 +11,7 @@ import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import StarIcon from '@mui/icons-material/Star';
 import { styled } from '@mui/material/styles';
-import getUpvoteCount from "../Utils/firebase-config";
+import { getUpvoteCount, getDownvoteCount, getStarsCount, incrementUpvotes, decrementDownvotes } from "../Utils/firebase-config";
 // import voteSnap from "../Utils/firebase-config";
 
 
@@ -19,9 +19,28 @@ import getUpvoteCount from "../Utils/firebase-config";
 export default function LikeButtons() {
 
     const [upVotes, setUpvotes] = useState(0);
+    const [downVotes, setDownvotes] = useState(0);
+    const [stars, setStars] = useState(0);
 
     useEffect(() => {
+        const fetchUpVotes = async () => {
+            const upvotes = await getUpvoteCount();
+            setUpvotes(upvotes.docs[0].data().f1);
+        };
+
+        const fetchDownVotes = async () => {
+            const downvotes = await getDownvoteCount();
+            setDownvotes(downvotes.docs[0].data().f1);
+        };
+
+        const fetchStars = async () => {
+            const stars = await getStarsCount();
+            setStars(stars.docs[0].data().f1);
+        };
         
+        fetchUpVotes();
+        fetchDownVotes();
+        fetchStars();
     }, [])
     
     
@@ -34,7 +53,7 @@ export default function LikeButtons() {
                     Upvotes
                 </Typography>
                 <Typography gutterBottom variant="h6" component="div">
-                    $4.50
+                    {upVotes}
                 </Typography>
             </Stack>
             
@@ -43,7 +62,7 @@ export default function LikeButtons() {
                     Downvotes
                 </Typography>
                 <Typography gutterBottom variant="h6" component="div">
-                    $4.50
+                    {downVotes}
                 </Typography>
 
             </Stack>
@@ -62,10 +81,26 @@ export default function LikeButtons() {
         
         <Box sx={{ display: 'flex', direction: 'row', m: 4 , gap: 5, p: 2, justifyContent: 'space-between', alignItems: 'center' }}>
             <Fab color="primary" aria-label="add">
-                <ArrowUpwardIcon onClick={()=>(getUpvoteCount())}/>
+                <ArrowUpwardIcon 
+                    onClick={async () => {
+                        console.log('upVotes: ', upVotes); 
+                        const success = incrementUpvotes();
+                        if (success) {
+                            setUpvotes(prevState => prevState + 1);
+                        }
+                    }
+                }/>
             </Fab>
             <Fab color="secondary" aria-label="subtract">
-                <ArrowDownwardIcon />
+                <ArrowDownwardIcon 
+                    onClick={async () => {
+                        console.log('downVotes: ', downVotes); 
+                        const success = decrementDownvotes();
+                        if (success) {
+                            setDownvotes(prevState => prevState + 1);
+                        }
+                    }
+                }/>
             </Fab>
             <Fab aria-label="like">
                 <StarIcon />
@@ -74,9 +109,3 @@ export default function LikeButtons() {
     </Card>
   );
 }
-
-const StyledBox = styled(Box)({
-    // display: "flex",
-    // flexDirection: "column",
-    justifyContent: "center",
-});
