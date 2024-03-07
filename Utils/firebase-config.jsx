@@ -20,28 +20,23 @@ const db = getFirestore(app);
 
 const colRef = collection(db, 'Upvotes')
 
-const voteSnap = await getDocs(colRef)
-    .then((data) => {
-        console.log('voteSnap data', data.docs[0].data().f1)
-    })
-    .catch((err) => {
-        console.log(err)
-    })
+// const voteSnap = await getDocs(colRef)
+//     .then((data) => {
+//         console.log('voteSnap data', data.docs[0].data().f1)
+//     })
+//     .catch((err) => {
+//         console.log(err)
+//     })
 
-// const getUpvoteCount = async () => {
-//   const docRef = collection(db, 'Upvotes');
-//   const docSnap = await getDoc(docRef);
+// export default voteSnap;
 
-//   if (docSnap.exists()) {
-//     console.log("Document data:", docSnap.data());
-//     return docSnap.data();
-//   } else {
-//     console.log("No such document!");
-//     return null;
-//   }
-// };
+const getUpvoteCount = async () => {
+    const docSnap = await getDocs(colRef);
+    console.log("Document data:", docSnap.docs[0].data().f1);
+    return docSnap;
+};
 
-// export default getUpvoteCount;
-export default voteSnap;
+export default getUpvoteCount;
+
 
 

@@ -10,9 +10,9 @@ import Fab from '@mui/material/Fab';
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import StarIcon from '@mui/icons-material/Star';
-import { styled } from "@mui/material/styles";
+import { styled } from '@mui/material/styles';
 import getUpvoteCount from "../Utils/firebase-config";
-import voteSnap from "../Utils/firebase-config";
+// import voteSnap from "../Utils/firebase-config";
 
 
 
@@ -62,7 +62,7 @@ export default function LikeButtons() {
         
         <Box sx={{ display: 'flex', direction: 'row', m: 4 , gap: 5, p: 2, justifyContent: 'space-between', alignItems: 'center' }}>
             <Fab color="primary" aria-label="add">
-                <ArrowUpwardIcon onClick={()=>(console.log('hello?'))}/>
+                <ArrowUpwardIcon onClick={()=>(getUpvoteCount())}/>
             </Fab>
             <Fab color="secondary" aria-label="subtract">
                 <ArrowDownwardIcon />
