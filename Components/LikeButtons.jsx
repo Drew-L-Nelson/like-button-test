@@ -124,10 +124,16 @@ export default function LikeButtons() {
                     }
                 />
             </Fab>
-            <Fab aria-label="like" onClick={starsHandleClicked} sx={ starIsClicked? clickedStyle : defaultStyle } >
+            <Fab aria-label="like"
+                sx={{ 
+                    ...(starIsClicked? clickedStyle : defaultStyle), 
+                    '&:hover': { ...(!starIsClicked? {bgcolor: 'rgba(0, 0, 0, 0.04)',} : clickedStyle ) } 
+                }} 
+            >
                 <StarIcon 
                     onClick={async () => {
                         console.log('stars: ', stars); 
+                        starsHandleClicked();
                         const success = incrementStars();
                             if (success && !starIsClicked) {
                                 setStars(prevState => prevState + 1);
