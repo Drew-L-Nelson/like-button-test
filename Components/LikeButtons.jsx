@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useState, useEffect } from "react";
 import { ThemeProvider, createTheme } from '@mui/system';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
@@ -10,8 +11,20 @@ import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import StarIcon from '@mui/icons-material/Star';
 import { styled } from "@mui/material/styles";
+import getUpvoteCount from "../Utils/firebase-config";
+import voteSnap from "../Utils/firebase-config";
+
+
 
 export default function LikeButtons() {
+
+    const [upVotes, setUpvotes] = useState(0);
+
+    useEffect(() => {
+        
+    }, [])
+    
+    
   return (
     <Card variant="outlined" sx={{ maxWidth: 360, backgroundColor: '#f5f5f5', borderColor: '#e0e0e0', borderWidth: 1, borderRadius: '10px', }}>
         <Box sx={{ p: 2 }}>
@@ -44,12 +57,12 @@ export default function LikeButtons() {
                 </Typography>
 
             </Stack>
-            <Divider sx={{ my: 2 }} />
+            <Divider sx={{ mt: 2, mb: -2 }} />
         </Box>
         
-        <Box sx={{ "& > :not(style)": { ml: 5 }, p: 3, mt: -4 }}>
+        <Box sx={{ display: 'flex', direction: 'row', m: 4 , gap: 5, p: 2, justifyContent: 'space-between', alignItems: 'center' }}>
             <Fab color="primary" aria-label="add">
-                <ArrowUpwardIcon />
+                <ArrowUpwardIcon onClick={()=>(console.log('hello?'))}/>
             </Fab>
             <Fab color="secondary" aria-label="subtract">
                 <ArrowDownwardIcon />
