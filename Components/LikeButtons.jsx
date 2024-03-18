@@ -128,7 +128,7 @@ export default function LikeButtons() {
                 sx={{ 
                     ...(starIsClicked? clickedStyle : defaultStyle), 
                     '&:hover': { ...(!starIsClicked? {bgcolor: 'rgba(0, 0, 0, 0.04)',} : clickedStyle ) } 
-                }} 
+                }}
             >
                 <StarIcon 
                     onClick={async () => {
