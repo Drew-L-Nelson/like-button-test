@@ -102,26 +102,26 @@ export default function LikeButtons() {
         <Box sx={{ display: 'flex', direction: 'row', m: 4 , gap: 5, p: 2, justifyContent: 'space-between', alignItems: 'center' }}>
             <Fab color="primary" aria-label="add">
                 <ArrowUpwardIcon 
-                    onClick={async () => {
-                        console.log('upVotes: ', upVotes); 
-                        const success = incrementUpvotes();
-                            if (success) {
-                                setUpvotes(prevState => prevState + 1);
-                            }
-                        }
-                    }
+                    onClick={() => {
+                        console.log('upVotes: ', upVotes + 1);
+                        setUpvotes(upVotes + 1); // Optimistically update the UI
+                        incrementUpvotes().catch((error) => {
+                            console.error('Failed to increment upvotes in database', error);
+                            setUpvotes(upVotes); // Revert the optimistic update on error
+                        });
+                    }}
                 />
             </Fab>
             <Fab color="secondary" aria-label="subtract">
                 <ArrowDownwardIcon 
-                    onClick={async () => {
-                        console.log('downVotes: ', downVotes); 
-                        const success = decrementDownvotes();
-                            if (success) {
-                                setDownvotes(prevState => prevState + 1);
-                            }
-                        }
-                    }
+                    onClick={() => {
+                        console.log('downVotes: ', downVotes + 1); 
+                        setDownvotes(downVotes + 1); // Optimistically update the UI
+                        decrementDownvotes().catch((error) => {
+                            console.error('Failed to increment downvotes in database', error);
+                            setDownvotes(downVotes); // Revert the optimistic update on error
+                        });
+                    }}
                 />
             </Fab>
             <Fab aria-label="like"
@@ -131,15 +131,24 @@ export default function LikeButtons() {
                 }}
             >
                 <StarIcon 
-                    onClick={async () => {
-                        console.log('stars: ', stars); 
-                        starsHandleClicked();
-                        const success = incrementStars();
-                            if (success && !starIsClicked) {
-                                setStars(prevState => prevState + 1);
-                            }
+                    onClick={() => {
+                        console.log('stars: ', stars + 1); 
+                        if (!starIsClicked) {
+                            starsHandleClicked(); // Toggle the visual state of the star
+                            setStars(stars + 1); // Optimistically update the UI
+                            incrementStars().catch((error) => {
+                                console.error('Failed to increment stars in database', error);
+                                setStars(stars); // Revert the optimistic update on error
+                                starsHandleClicked(); // Revert the visual state toggle if needed
+                            });
+                        } else { // If it was already clicked, this means we're "unstarring"
+                            setStars(stars - 1); // Optimistically decrement the UI
+                            starsHandleClicked(); // Revert the visual state toggle if needed
+                            // Here you would call a decrement function for the database
+                            // For example: decrementStars().catch((error) => { ... });
+                            // Remember to implement decrementStars() or similar in your firebase-config.jsx
                         }
-                    }
+                    }}
                 />
             </Fab>
         </Box>
