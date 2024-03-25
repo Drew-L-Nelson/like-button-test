@@ -25,8 +25,18 @@ export default function LikeButtons() {
     const [upVotes, setUpvotes] = useState(0);
     const [downVotes, setDownvotes] = useState(0);
     const [stars, setStars] = useState(0);
+    const [upvoteIsClicked, setUpvoteIsClicked] = useState(false);
+    const [downvoteIsClicked, setDownvoteIsClicked] = useState(false);
     const [starIsClicked, setStarIsClicked] = useState(false);
 
+    const upvoteHandleClicked = () => {
+        setUpvoteIsClicked(!upvoteIsClicked);
+    };
+
+    const downvoteHandleClicked = () => {
+        setDownvoteIsClicked(!downvoteIsClicked);
+    };
+    
     const starsHandleClicked = () => {
         setStarIsClicked(!starIsClicked);
     };
@@ -100,56 +110,55 @@ export default function LikeButtons() {
         </Box>
         
         <Box sx={{ display: 'flex', direction: 'row', m: 4 , gap: 5, p: 2, justifyContent: 'space-between', alignItems: 'center' }}>
-            <Fab color="primary" aria-label="add">
-                <ArrowUpwardIcon 
-                    onClick={() => {
-                        console.log('upVotes: ', upVotes + 1);
-                        setUpvotes(upVotes + 1); // Optimistically update the UI
-                        incrementUpvotes().catch((error) => {
-                            console.error('Failed to increment upvotes in database', error);
-                            setUpvotes(upVotes); // Revert the optimistic update on error
-                        });
-                    }}
-                />
+            <Fab color="primary" aria-label="add"
+                onClick={() => {
+                    console.log('upVotes: ', upVotes + 1);
+                    setUpvotes(upVotes + 1); // Optimistically update the UI
+                    incrementUpvotes().catch((error) => {
+                        console.error('Failed to increment upvotes in database', error);
+                        setUpvotes(upVotes); // Revert the optimistic update on error
+                    });
+                }}
+            >
+                <ArrowUpwardIcon/>
             </Fab>
-            <Fab color="secondary" aria-label="subtract">
-                <ArrowDownwardIcon 
-                    onClick={() => {
-                        console.log('downVotes: ', downVotes + 1); 
-                        setDownvotes(downVotes + 1); // Optimistically update the UI
-                        decrementDownvotes().catch((error) => {
-                            console.error('Failed to increment downvotes in database', error);
-                            setDownvotes(downVotes); // Revert the optimistic update on error
-                        });
-                    }}
-                />
+            <Fab color="secondary" aria-label="subtract"
+                onClick={() => {
+                    console.log('downVotes: ', downVotes + 1); 
+                    setDownvotes(downVotes + 1); // Optimistically update the UI
+                    decrementDownvotes().catch((error) => {
+                        console.error('Failed to increment downvotes in database', error);
+                        setDownvotes(downVotes); // Revert the optimistic update on error
+                    });
+                }}
+            >
+                <ArrowDownwardIcon/>
             </Fab>
             <Fab aria-label="like"
                 sx={{ 
                     ...(starIsClicked? clickedStyle : defaultStyle), 
                     '&:hover': { ...(!starIsClicked? {bgcolor: 'rgba(0, 0, 0, 0.04)',} : clickedStyle ) } 
                 }}
-            >
-                <StarIcon 
-                    onClick={() => {
-                        console.log('stars: ', stars + 1); 
-                        if (!starIsClicked) {
-                            starsHandleClicked(); // Toggle the visual state of the star
-                            setStars(stars + 1); // Optimistically update the UI
-                            incrementStars().catch((error) => {
-                                console.error('Failed to increment stars in database', error);
-                                setStars(stars); // Revert the optimistic update on error
-                                starsHandleClicked(); // Revert the visual state toggle if needed
-                            });
-                        } else { // If it was already clicked, this means we're "unstarring"
-                            setStars(stars - 1); // Optimistically decrement the UI
+                onClick={() => {
+                    console.log('stars: ', stars + 1); 
+                    if (!starIsClicked) {
+                        starsHandleClicked(); // Toggle the visual state of the star
+                        setStars(stars + 1); // Optimistically update the UI
+                        incrementStars().catch((error) => {
+                            console.error('Failed to increment stars in database', error);
+                            setStars(stars); // Revert the optimistic update on error
                             starsHandleClicked(); // Revert the visual state toggle if needed
-                            // Here you would call a decrement function for the database
-                            // For example: decrementStars().catch((error) => { ... });
-                            // Remember to implement decrementStars() or similar in your firebase-config.jsx
-                        }
-                    }}
-                />
+                        });
+                    } else { // If it was already clicked, this means we're "unstarring"
+                        setStars(stars - 1); // Optimistically decrement the UI
+                        starsHandleClicked(); // Revert the visual state toggle if needed
+                        // Here you would call a decrement function for the database
+                        // For example: decrementStars().catch((error) => { ... });
+                        // Remember to implement decrementStars() or similar in your firebase-config.jsx
+                    }
+                }}
+            >
+                <StarIcon/>
             </Fab>
         </Box>
     </Card>
