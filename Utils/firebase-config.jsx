@@ -1,9 +1,7 @@
 import { initializeApp } from "firebase/app";
-// import { getAnalytics } from "firebase/analytics";
+import { getAuth } from "firebase/auth";
 import { getFirestore, collection, getDocs, updateDoc, increment } from "firebase/firestore";
 
-
-// const analytics = getAnalytics(app);
 
 const firebaseConfig = {
   apiKey: "AIzaSyDbO5Pw41j3XEP7awOpb7XQT4yDq8w3T8Y",
@@ -16,6 +14,7 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 const db = getFirestore(app);
 
 const upvoteRef = collection(db, 'Upvotes')
